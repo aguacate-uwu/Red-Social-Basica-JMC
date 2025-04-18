@@ -1,0 +1,23 @@
+uuid: b22d9928-5343-4656-b386-91054e06f885
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.publicacion
+  module:
+    - text
+id: node.publicacion.body
+field_name: body
+entity_type: node
+bundle: publicacion
+label: 'Contenido de la publicación'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary
