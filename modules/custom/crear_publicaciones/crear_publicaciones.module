@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function crear_publicaciones_install() {
+  $content_type_id = 'publicacion_usuario';
+
+  // Verificar si el tipo de contenido ya existe.
+  $content_type = \Drupal::entityTypeManager()->getStorage('node_type')->load($content_type_id);
+  if (!$content_type) {
+    // Crear el tipo de contenido.
+    $content_type = \Drupal\node\Entity\NodeType::create([
+      'type' => $content_type_id,
+      'name' => t('Publicación de Usuario'),
+      'description' => t('Contenido creado por los usuarios en la página principal.'),
+      'display_submitted' => TRUE,
+    ]);
+    $content_type->save();
+
+    // Asignar permisos para usuarios autenticados.
+    $role = \Drupal\user\Entity\Role::load('authenticated');
+    if ($role) {
+      $permissions = [
+        'create ' . $content_type_id . ' content',
+        'edit own ' . $content_type_id . ' content',
+        'delete own ' . $content_type_id . ' content',
+      ];
+      foreach ($permissions as $permission) {
+        $role->grantPermission($permission);
+      }
+      $role->save();
+    }
+  }
+}

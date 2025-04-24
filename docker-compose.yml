@@ -1,33 +1,30 @@
-version: '3.8'
 services:
-  database:
-    image: mysql:5.7
+  db:
+    container_name: tfg-database
+    restart: always
+    image: mariadb:10.6
     environment:
-      MYSQL_ROOT_PASSWORD: aguacate # password_root
-      MYSQL_DATABASE: tfg-database
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: aguacate # password_drupal
+      MYSQL_ROOT_PASSWORD: drupal
+      MYSQL_DATABASE: drupal
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
     volumes:
       - db_data:/var/lib/mysql
     ports:
       - "3306:3306"
 
   web:
-    image: drupal:9.5-php8.1-apache
+    container_name: tfg-web
+    image: drupal:10
     depends_on:
-      - database
+      - db
     ports:
       - "8080:80"
     volumes:
-      - drupal_modules:/var/www/html/modules
-      - drupal_profiles:/var/www/html/profiles
-      - drupal_sites:/var/www/html/sites
-      - drupal_themes:/var/www/html/themes
-    environment:
-      DRUPAL_DATABASE_HOST: database
-      DRUPAL_DATABASE_NAME: drupal
-      DRUPAL_DATABASE_USER: admin
-      DRUPAL_DATABASE_PASSWORD: aguacate
+      - ./modules:/var/www/html/modules
+      - ./themes:/var/www/html/themes
+      - ./profiles:/var/www/html/profiles
+      - ./sites:/var/www/html/sites
 
 volumes:
   db_data:
