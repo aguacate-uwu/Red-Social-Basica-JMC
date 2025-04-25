@@ -1,5 +1,5 @@
-# Usa la imagen oficial de Drupal como base
-FROM drupal:10
+# Usa la imagen de PHP con Apache como base
+FROM php:8.4-apache-bullseye
 
 # Instala dependencias adicionales si es necesario
 RUN apt-get update && apt-get install -y \
@@ -13,7 +13,21 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     curl \
-    && docker-php-ext-install pdo_mysql
+    postgresql-dev
+
+RUN docker-php-ext-install -j$(nproc) \
+    pdo \
+    pgsql \
+    zip \
+    intl \
+    gd \
+    pdo_mysql
+
+# Instalación de Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Establecer directorio de trabajo
+WORKDIR /var/www/html
 
 # Copia los archivos de tu proyecto al contenedor
 COPY ./modules /var/www/html/modules
