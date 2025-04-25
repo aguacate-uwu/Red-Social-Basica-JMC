@@ -892,16 +892,37 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 # if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
 #   include $app_root . '/' . $site_path . '/settings.local.php';
 # }
-$databases['default']['default'] = array (
-  'database' => 'drupal',
-  'username' => 'drupal',
-  'password' => 'drupal',
-  'prefix' => '',
-  'host' => 'db',
-  'port' => '',
-  'isolation_level' => 'READ COMMITTED',
+
+// Configuración de la base de datos.
+$databases['default']['default'] = [
   'driver' => 'mysql',
+  'database' => getenv('MYSQL_DATABASE') ?: 'drupal',
+  'username' => getenv('MYSQL_USER') ?: 'drupal',
+  'password' => getenv('MYSQL_PASSWORD') ?: 'drupal',
+  'host' => getenv('MYSQL_HOST') ?: 'db',
+  'port' => getenv('MYSQL_PORT') ?: '3306',
+  'prefix' => '',
   'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
   'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
-);
-$settings['config_sync_directory'] = 'sites/default/files/config_GjDP0izjbL6Fcqnj_TL9fY3q3MO6vFHvgBjLD5cUW7TX-_NfWXlTj5M4AcQNyp3XY9hF1AnzcQ/sync';
+];
+
+// Configuración del directorio de sincronización de configuración.
+$settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY') ?: 'sites/default/files/config_GjDP0izjbL6Fcqnj_TL9fY3q3MO6vFHvgBjLD5cUW7TX-_NfWXlTj5M4AcQNyp3XY9hF1AnzcQ/sync';
+
+// Configuración de patrones de host confiables.
+$settings['trusted_host_patterns'] = [
+  '^red-social-basica-jmc\.onrender\.com$',
+];
+
+// Carga de configuraciones locales opcionales.
+if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+  include $app_root . '/' . $site_path . '/settings.local.php';
+}
+
+// Salt para la seguridad de Drupal.
+$settings['hash_salt'] = 'EHi7paDa3j4TePk76_Rb15sQne0tvqbyBjP7XEug2ZeZuV8_EsTy8CzZJ_IbPYVkVu5ub-XNUg';
+
+// Configuración adicional para entornos de desarrollo o producción.
+$settings['update_free_access'] = FALSE;
+$settings['entity_update_backup'] = TRUE;
+$settings['state_cache'] = TRUE;
