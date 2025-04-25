@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 # Copia los archivos de tu proyecto al contenedor
 COPY ./modules /var/www/html/modules
 COPY ./themes /var/www/html/themes
-COPY ./profiles /var/www/html/profiles
+# COPY ./profiles /var/www/html/profiles
 COPY ./sites /var/www/html/sites
 
 # Establece los permisos correctos para los archivos
