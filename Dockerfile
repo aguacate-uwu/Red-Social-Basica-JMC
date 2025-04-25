@@ -5,7 +5,15 @@ FROM drupal:10
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
-    && rm -rf /var/lib/apt/lists/*
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    zip \
+    curl \
+    && docker-php-ext-install pdo_mysql
 
 # Copia los archivos de tu proyecto al contenedor
 COPY ./modules /var/www/html/modules
