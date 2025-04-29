@@ -30,6 +30,12 @@ COPY . /var/www/html
 # COPY ./profiles /var/www/html/profiles
 # COPY ./sites /var/www/html/sites
 
+# Configuración de un index.php para Apache
+COPY drupal.conf /etc/apache2/sites-available/drupal.conf
+RUN a2ensite drupal.conf
+RUN a2dissite 000-default.conf
+RUN service apache2 reload
+
 # Establece los permisos correctos para los archivos
 RUN chown -R www-data:www-data /var/www/html
 
