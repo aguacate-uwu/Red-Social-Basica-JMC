@@ -4,24 +4,11 @@ FROM php:8.4-apache-bullseye
 # Instala dependencias adicionales si es necesario
 RUN apt-get update && apt-get install -y \
     git \
-    unzip \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
-    zip \
     curl \
-    postgresql-dev
-
-RUN docker-php-ext-install -j$(nproc) \
-    pdo \
-    pgsql \
-    zip \
-    intl \
+    && docker-php-ext-install -j$(nproc) \
+    pdo_mysql \
     gd \
-    pdo_mysql
+    intl
 
 # Instalación de Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
