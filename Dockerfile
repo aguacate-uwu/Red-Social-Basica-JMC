@@ -1,11 +1,15 @@
 # Usa la imagen de PHP con Apache como base
 FROM php:8.4-apache-bullseye
 
-# Instala dependencias adicionales si es necesario
+# Una variable para evitar un warning de render
+ENV TERM=xterm
+
+# Instala dependencias adicionales
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     libzip-dev \
+    libpng-dev \
     && docker-php-ext-install -j$(nproc) \
     pdo_mysql \
     gd \
