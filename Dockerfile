@@ -30,7 +30,8 @@ COPY ./modules /var/www/html/modules
 COPY ./sites /var/www/html/sites
 
 # Establece los permisos correctos para los archivos
-RUN chown -R www-data:www-data /var/www/html/sites /var/www/html/modules /var/www/html/themes /var/www/html/profiles
+RUN chown -R www-data:www-data /var/www/html/sites /var/www/html/modules 
+# /var/www/html/themes /var/www/html/profiles
 
 # Exponer el puerto 80
 EXPOSE 80
