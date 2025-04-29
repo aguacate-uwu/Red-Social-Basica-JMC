@@ -5,10 +5,12 @@ FROM php:8.4-apache-bullseye
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    libzip-dev \
     && docker-php-ext-install -j$(nproc) \
     pdo_mysql \
     gd \
-    intl
+    intl \
+    zip
 
 # Instalación de Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
