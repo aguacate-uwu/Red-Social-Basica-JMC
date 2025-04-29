@@ -30,10 +30,16 @@ COPY . /var/www/html
 # COPY ./profiles /var/www/html/profiles
 # COPY ./sites /var/www/html/sites
 
+# Habilitar el módulo de reescritura de Apache
+RUN a2enmod rewrite
 # Configuración de un index.php para Apache
 COPY drupal.conf /etc/apache2/sites-available/drupal.conf
 RUN a2ensite drupal.conf
 RUN a2dissite 000-default.conf
+# Comando para ver si hay error con drupal.conf
+RUN apachectl -t
+# Intentar inciiar y esperar un poco
+RUN service apache2 start && sleep 5 
 RUN service apache2 reload
 
 # Establece los permisos correctos para los archivos
