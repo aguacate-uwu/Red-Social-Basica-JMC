@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     libzip-dev \
     libpng-dev \
+    libicu-dev \
     && docker-php-ext-install -j$(nproc) \
     pdo_mysql \
     gd \
