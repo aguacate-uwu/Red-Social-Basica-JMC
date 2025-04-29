@@ -24,14 +24,14 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /var/www/html
 
 # Copia los archivos de tu proyecto al contenedor
-COPY ./modules /var/www/html/modules
+COPY . /var/www/html
+# COPY ./modules /var/www/html/modules
 # COPY ./themes /var/www/html/themes
 # COPY ./profiles /var/www/html/profiles
-COPY ./sites /var/www/html/sites
+# COPY ./sites /var/www/html/sites
 
 # Establece los permisos correctos para los archivos
-RUN chown -R www-data:www-data /var/www/html/sites /var/www/html/modules 
-# /var/www/html/themes /var/www/html/profiles
+RUN chown -R www-data:www-data /var/www/html
 
 # Exponer el puerto 80
 EXPOSE 80
