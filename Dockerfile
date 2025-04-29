@@ -25,6 +25,7 @@ WORKDIR /var/www/html
 
 # Copia los archivos de tu proyecto al contenedor
 COPY . /var/www/html
+COPY web /var/www/html/web
 # COPY ./modules /var/www/html/modules
 # COPY ./themes /var/www/html/themes
 # COPY ./profiles /var/www/html/profiles
