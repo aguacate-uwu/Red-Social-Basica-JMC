@@ -25,10 +25,10 @@ WORKDIR /var/www/html/web
 
 # Copia los archivos del proyecto al contenedor
 COPY ./drupal/web/ /var/www/html/web/
-# COPY ./modules /var/www/html/modules
-# COPY ./themes /var/www/html/themes
-# COPY ./profiles /var/www/html/profiles
-# COPY ./sites /var/www/html/sites
+COPY ./drupal/vendor/ /var/www/html/vendor/
+
+# Instala las dependencias de Composer
+RUN composer install --no-dev --optimize-autoloader --working-dir=/var/www/html
 
 # Habilitar el módulo de reescritura de Apache
 RUN a2enmod rewrite
