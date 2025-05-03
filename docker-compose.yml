@@ -23,3 +23,6 @@ services:
     volumes:
       - ./drupal/web:/var/www/html
     restart: always
+
+volumes:
+  db_data:
