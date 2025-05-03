@@ -21,14 +21,5 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./modules:/var/www/html/modules
-      - ./themes:/var/www/html/themes
-      - ./profiles:/var/www/html/profiles
-      - ./sites:/var/www/html/sites
-
-volumes:
-  db_data:
-  drupal_modules:
-  drupal_profiles:
-  drupal_sites:
-  drupal_themes:
+      - ./drupal/web:/var/www/html
+    restart: always
