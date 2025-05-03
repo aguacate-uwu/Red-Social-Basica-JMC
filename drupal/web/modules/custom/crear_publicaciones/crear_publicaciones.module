@@ -1,0 +1,137 @@
+<?php
+
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\block\Entity\Block;
+/**
+ * Implementa hook_install().
+ *
+ * Esta función se ejecuta cuando se instala el módulo. Crea un nuevo tipo
+ * de contenido llamado 'Publicación de Usuario' para contenido generado por
+ * los usuarios en la página principal. También asigna permisos para que los
+ * usuarios autenticados puedan crear, editar y eliminar su propio contenido
+ * de este tipo. Además, asegura que se añada el campo 'Cuerpo' al tipo de
+ * contenido y configura las opciones de visualización del formulario y de
+ * la vista para este campo.
+ */
+function crear_publicaciones_install() {
+  $content_type_id = 'publicacion_usuario';
+
+  // Verificar si el tipo de contenido ya existe.
+  $content_type = \Drupal::entityTypeManager()->getStorage('node_type')->load($content_type_id);
+  if (!$content_type) {
+    // Crear el tipo de contenido.
+    $content_type = \Drupal\node\Entity\NodeType::create([
+      'type' => $content_type_id,
+      'name' => t('Publicación de Usuario', [], ['context' => 'content type name']),
+      'description' => t('Contenido creado por los usuarios en la página principal.', [], ['context' => 'content type description']),
+      'display_submitted' => TRUE,
+    ]);
+    $content_type->save();
+    }
+
+    // Asignar permisos para usuarios autenticados.
+    $role = \Drupal\user\Entity\Role::load('authenticated');
+    if ($role) {
+      $permissions = [
+        'create ' . $content_type_id . ' content',
+        'edit own ' . $content_type_id . ' content',
+        'delete own ' . $content_type_id . ' content',
+      ];
+      foreach ($permissions as $permission) {
+        $role->grantPermission($permission);
+      }
+      $role->save();
+    }
+
+    // Añadir el campo 'Cuerpo' si no existe.
+    $field_storage = FieldStorageConfig::loadByName('node', 'body');
+    if (!$field_storage) {
+      $field_storage = FieldStorageConfig::create([
+        'entity_type' => 'node',
+        'field_name' => 'body',
+        'type' => 'text_with_summary',
+        'settings' => [
+          'max_length' => 16383,
+        ],
+        'cardinality' => 1,
+        'translatable' => TRUE,
+      ]);
+      $field_storage->save();
+    }
+
+    $field = FieldConfig::loadByName('node', $content_type_id, 'body');
+    if (!$field) {
+      $field = FieldConfig::create([
+        'entity_type' => 'node',
+        'bundle' => $content_type_id,
+        'field_name' => 'body',
+        'label' => t('Cuerpo'),
+        'settings' => [
+          'display_summary' => TRUE,
+        ],
+        'required' => TRUE,
+      ]);
+      $field->save();
+    }
+
+    // Configurar la visualización del formulario para el campo 'Cuerpo'.
+    $form_display = EntityFormDisplay::load('node.' . $content_type_id . '.default');
+    if (!$form_display) {
+      $form_display = EntityFormDisplay::create([
+        'targetEntityType' => 'node',
+        'bundle' => $content_type_id,
+        'mode' => 'default',
+        'status' => TRUE,
+      ]);
+    }
+    $form_display->setComponent('body', [
+      'type' => 'text_textarea_with_summary',
+      'settings' => [
+        'rows' => 9,
+        'summary_rows' => 3,
+      ],
+      'weight' => 0,
+      'region' => 'content',
+    ])->save();
+
+    // Configurar la visualización de la vista para el campo 'Cuerpo'.
+    $view_display = EntityViewDisplay::load('node.' . $content_type_id . '.default');
+    if (!$view_display) {
+      $view_display = EntityViewDisplay::create([
+        'targetEntityType' => 'node',
+        'bundle' => $content_type_id,
+        'mode' => 'default',
+        'status' => TRUE,
+      ]);
+    }
+    $view_display->setComponent('body', [
+      'label' => 'hidden',
+      'type' => 'text_default',
+      'settings' => [],
+    ])->save();
+
+    // Colocar el bloque programáticamente.
+    $block_id = 'crear_publicacion_block'; // El ID de tu bloque
+    $region = 'content'; // La región donde quieres colocar el bloque
+
+    if (!Block::load($block_id)) {
+    // Crea una instancia del bloque.
+    $block = Block::create([
+      'id' => $block_id,
+      'plugin' => 'crear_publicacion_block', // El ID del plugin del bloque
+      'region' => $region,
+      'theme' => 'olivero', // El nombre del tema activo
+      'settings' => [
+        'label' => 'Crear Publicación', // Etiqueta del bloque
+        'label_display' => FALSE, // No mostrar el título del bloque
+      ],
+      'visibility' => [],
+      'status' => 1, // Nos aseguramos de que el bloque esté habilitado
+    ]);
+    $block->setWeight(-8);
+    $block->save();
+    }
+}

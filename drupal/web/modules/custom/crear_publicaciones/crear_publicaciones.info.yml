@@ -1,0 +1,11 @@
+name: 'Crear Publicaciones'
+type: 'module'
+description: 'Módulo que implementa la creación y muestra de publicaciones'
+package: 'Custom'
+core_version_requirement: ^10 || ^9
+dependencies:
+  - drupal:node
+  - drupal:user
+  - drupal:field
+  - drupal:text
+  - drupal:block
