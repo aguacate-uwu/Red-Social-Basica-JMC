@@ -23,8 +23,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Establecer directorio de trabajo
 WORKDIR /var/www/html/web
 
-# Copia los archivos de tu proyecto al contenedor
+# Copia los archivos del proyecto al contenedor
 COPY . /var/www/html
+COPY web/index.php /var/www/html/web/index.php
 # COPY ./modules /var/www/html/modules
 # COPY ./themes /var/www/html/themes
 # COPY ./profiles /var/www/html/profiles
