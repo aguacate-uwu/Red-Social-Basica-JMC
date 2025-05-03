@@ -1,6 +1,0 @@
-services:
-  registro_usuario.redirect_anonymous:
-    class: Drupal\registro_usuario\EventSubscriber\RedirectAnonymousSubscriber
-    arguments: ['@current_user', '@path.current', '@redirect.destination']
-    tags:
-      - { name: event_subscriber }

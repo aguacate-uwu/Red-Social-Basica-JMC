@@ -1,7 +1,0 @@
-registro_usuario.register:
-  path: '/registro'
-  defaults:
-    _controller: '\Drupal\registro_usuario\Controller\RegistroUsuarioController::register'
-    _title: 'Registro de Usuario'
-  requirements:
-    _permission: 'access content'
