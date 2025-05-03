@@ -27,9 +27,6 @@ WORKDIR /var/www/html/web
 COPY ./drupal/web/ /var/www/html/web/
 COPY ./drupal/vendor/ /var/www/html/vendor/
 
-# Instala las dependencias de Composer
-RUN composer install --no-dev --optimize-autoloader --working-dir=/var/www/html
-
 # Habilitar el módulo de reescritura de Apache
 RUN a2enmod rewrite
 # Configuración de un index.php para Apache
