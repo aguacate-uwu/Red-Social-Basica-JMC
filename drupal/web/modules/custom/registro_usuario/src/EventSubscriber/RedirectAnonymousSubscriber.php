@@ -65,11 +65,17 @@ class RedirectAnonymousSubscriber implements EventSubscriberInterface {
      * El evento de solicitud.
      */
     public function redirectToRegistration(RequestEvent $event) {
+        // Registro de depuración para verificar la ruta actual y el estado del usuario.
+        \Drupal::logger('registro_usuario')->debug('Ruta actual: @path, Usuario anónimo: @anonymous', [
+            '@path' => $this->currentPath->getPath(),
+            '@anonymous' => $this->currentUser->isAnonymous() ? 'Sí' : 'No',
+        ]);
+    
         // Verifica si el usuario es anónimo y está en la página de inicio.
         if ($this->currentUser->isAnonymous() && $this->currentPath->getPath() === '/') {
             // Define la ruta de registro.
             $registration_path = '/registro';
-
+    
             // Crea una respuesta de redirección a la página de registro.
             $response = new TrustedRedirectResponse($registration_path);
             $event->setResponse($response);
