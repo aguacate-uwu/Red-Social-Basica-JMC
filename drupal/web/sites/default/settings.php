@@ -895,15 +895,13 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 
 // Configuración de la base de datos.
 $databases['default']['default'] = [
-  'driver' => 'mysql',
-  'database' => getenv('MYSQL_DATABASE') ?: 'drupal',
-  'username' => getenv('MYSQL_USER') ?: 'drupal',
-  'password' => getenv('MYSQL_PASSWORD') ?: 'drupal',
-  'host' => getenv('MYSQL_HOST') ?: 'db',
-  'port' => getenv('MYSQL_PORT') ?: '3306',
+  'driver' => 'pgsql',
+  'database' => getenv('PGSQL_DATABASE') ?: 'db_6z23',
+  'username' => getenv('PGSQL_USER') ?: 'db_6z23_user',
+  'password' => getenv('PGSQL_PASSWORD') ?: 'dAlqku395tjeME692FuB4pSYWj6pb4is',
+  'host' => getenv('PGSQL_HOST') ?: 'dpg-d05o00buibrs73ft3230-a',
+  'port' => getenv('PGSQL_PORT') ?: '5432',
   'prefix' => '',
-  'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
-  'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
 ];
 
 // Configuración del directorio de sincronización de configuración.
