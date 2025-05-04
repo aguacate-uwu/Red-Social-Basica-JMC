@@ -4,4 +4,4 @@ registro_usuario.register:
     _controller: '\Drupal\registro_usuario\Controller\RegistroUsuarioController::register'
     _title: 'Registro de Usuario'
   requirements:
-    _access: 'TRUE'
+    _permission: 'access content'
