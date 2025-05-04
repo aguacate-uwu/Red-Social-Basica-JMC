@@ -13,7 +13,7 @@ use Drupal\Core\Block\BlockBase;
  *   category = @Translation("Custom")
  * )
  */
-class RegistroButtonBlock extends BlockBase {
+class RegistroUsuarioBloque extends BlockBase {
 
   /**
    * {@inheritdoc}
