@@ -3,3 +3,5 @@ type: 'module'
 description: 'Módulo que implementa el registro de usuarios'
 package: 'Custom'
 core_version_requirement: ^11 || ^10 || ^9 
+dependencies:
+  - drupal:block
