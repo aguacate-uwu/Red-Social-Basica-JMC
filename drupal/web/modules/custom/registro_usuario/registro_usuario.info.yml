@@ -2,4 +2,4 @@ name: 'Registro de Usuarios'
 type: 'module'
 description: 'Módulo que implementa el registro de usuarios'
 package: 'Custom'
-core_version_requirement: ^10 || ^9
+core_version_requirement: ^11 || ^10 || ^9 
