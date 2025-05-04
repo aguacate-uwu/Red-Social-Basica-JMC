@@ -896,10 +896,10 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 // Configuración de la base de datos.
 $databases['default']['default'] = [
   'driver' => 'pgsql',
-  'database' => getenv('PGSQL_DATABASE') ?: 'db_6z23',
+  'database' => getenv('PGSQL_DATABASE') ?: 'db_6z23_ka29',
   'username' => getenv('PGSQL_USER') ?: 'db_6z23_user',
-  'password' => getenv('PGSQL_PASSWORD') ?: 'dAlqku395tjeME692FuB4pSYWj6pb4is',
-  'host' => getenv('PGSQL_HOST') ?: 'dpg-d05o00buibrs73ft3230-a',
+  'password' => getenv('PGSQL_PASSWORD') ?: 'qJfRFQWC31RzimscV0GtONsGPKB2IDvV',
+  'host' => getenv('PGSQL_HOST') ?: 'dpg-d0bll9h5pdvs73cq9plg-a',
   'port' => getenv('PGSQL_PORT') ?: '5432',
   'prefix' => '',
 ];
