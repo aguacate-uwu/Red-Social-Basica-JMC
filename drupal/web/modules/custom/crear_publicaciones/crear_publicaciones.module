@@ -114,7 +114,7 @@ function crear_publicaciones_install() {
     ])->save();
 
     // Colocar el bloque programáticamente.
-    $block_id = 'crear_publicacion_block'; // El ID de tu bloque
+    $block_id = 'crear_publicacion_block'; // El ID del bloque
     $region = 'content'; // La región donde quieres colocar el bloque
 
     if (!Block::load($block_id)) {
@@ -128,7 +128,13 @@ function crear_publicaciones_install() {
         'label' => 'Crear Publicación', // Etiqueta del bloque
         'label_display' => FALSE, // No mostrar el título del bloque
       ],
-      'visibility' => [],
+      'visibility' => [
+        'request_path' => [
+          'id' => 'request_path',
+          'pages' => '<front>', // Solo en la página principal
+          'negate' => FALSE,
+        ],
+      ],
       'status' => 1, // Nos aseguramos de que el bloque esté habilitado
     ]);
     $block->setWeight(-8);
