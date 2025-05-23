@@ -99,17 +99,14 @@ function crear_publicaciones_install() {
     ]);
     
     // Ocultar campos innecesarios
-    $form_display->removeComponent('menu');
-    $form_display->removeComponent('revision_information');
-    $form_display->removeComponent('path');
-    $form_display->removeComponent('author');
-    $form_display->removeComponent('options');
-    $form_display->removeComponent('status');
-    $form_display->removeComponent('promote');
-    $form_display->removeComponent('sticky');
-    
+    $campos_a_ocultar = ['created', 'langcode', 'uid', 'revision_log', 'status', 'promote', 'sticky'];
+    foreach ($campos_a_ocultar as $campo) {
+      $form_display->removeComponent($campo);
+    }
+        
     $form_display->save();
 
+    // esto es solo para saber el nombre de los campos y que pueda quitarlos mejor
     \Drupal::logger('crear_publicaciones')->notice('<pre>' . print_r(array_keys($form_display->getComponents()), TRUE) . '</pre>');
 
     // Configurar la visualización de la vista para el campo 'Cuerpo'.
