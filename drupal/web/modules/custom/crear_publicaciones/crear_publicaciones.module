@@ -94,8 +94,13 @@ function crear_publicaciones_install() {
       'region' => 'content',
     ]);
     
-    // Ocultar el campo "status" del formulario
+    // Ocultar campos innecesarios
     $form_display->removeComponent('status');
+    $form_display->removeComponent('menu');
+    $form_display->removeComponent('revision_information');
+    $form_display->removeComponent('path');
+    $form_display->removeComponent('author');
+    $form_display->removeComponent('options');
     
     $form_display->save();
 
