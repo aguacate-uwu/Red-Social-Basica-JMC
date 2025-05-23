@@ -30,18 +30,9 @@ function crear_publicaciones_install() {
       'display_submitted' => TRUE,
     ]);
 
-    // Eliminar configuración de menu
-    $content_type->set('settings', array_merge($content_type->get('settings'), [
-      'menu_ui' => FALSE,
-      'display_submitted' => FALSE,
-    ]));
+    // Eliminar parte innecesaria
+    $content_type->set('display_submitted', FALSE); 
     
-    $content_type->setThirdPartySetting('node', 'options', [
-      'status' => FALSE, // Oculta el checkbox "Published"
-      'promote' => FALSE, // Oculta "Promote to front page"
-      'sticky' => FALSE, // Oculta "Sticky at top"
-    ]);
-
     $content_type->save();
     }
 
@@ -108,12 +99,15 @@ function crear_publicaciones_install() {
     ]);
     
     // Ocultar campos innecesarios
-    $form_display->removeComponent('status');
     $form_display->removeComponent('menu');
     $form_display->removeComponent('revision_information');
     $form_display->removeComponent('path');
     $form_display->removeComponent('author');
     $form_display->removeComponent('options');
+
+    $form_display->setComponent('status', ['type' => 'hidden']);
+    $form_display->setComponent('promote', ['type' => 'hidden']);
+    $form_display->setComponent('sticky', ['type' => 'hidden']);
     
     $form_display->save();
 
