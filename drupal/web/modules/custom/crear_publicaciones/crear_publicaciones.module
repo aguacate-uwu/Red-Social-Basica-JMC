@@ -27,7 +27,6 @@ function crear_publicaciones_install() {
       'type' => $content_type_id,
       'name' => t('Publicación de Usuario', [], ['context' => 'content type name']),
       'description' => t('Contenido creado por los usuarios en la página principal.', [], ['context' => 'content type description']),
-      'display_submitted' => TRUE,
     ]);
 
     // Eliminar parte innecesaria
@@ -99,7 +98,7 @@ function crear_publicaciones_install() {
     ]);
     
     // Ocultar campos innecesarios
-    $campos_a_ocultar = ['created', 'langcode', 'uid', 'revision_log', 'status', 'promote', 'sticky'];
+    $campos_a_ocultar = ['created', 'langcode', 'uid', 'revision_log', 'status', 'promote', 'sticky', 'path'];
     foreach ($campos_a_ocultar as $campo) {
       $form_display->removeComponent($campo);
     }
