@@ -235,7 +235,7 @@ function crear_publicaciones_install() {
     ]);
 
     $teaser_display->removeComponent('comment');
-
+    
     $teaser_display->setComponent('comment', [
       'type' => 'comment_entity_count',
       'label' => 'inline',
