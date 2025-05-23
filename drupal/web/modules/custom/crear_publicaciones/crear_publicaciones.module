@@ -52,7 +52,7 @@ function crear_publicaciones_install() {
       $field_storage = FieldStorageConfig::create([
         'entity_type' => 'node',
         'field_name' => 'body',
-        'type' => 'text_with_summary',
+        'type' => 'text_long',
         'settings' => [
           'max_length' => 16383,
         ],
@@ -69,9 +69,7 @@ function crear_publicaciones_install() {
         'bundle' => $content_type_id,
         'field_name' => 'body',
         'label' => t('Cuerpo'),
-        'settings' => [
-          'display_summary' => TRUE,
-        ],
+        'settings' => [],
         'required' => TRUE,
       ]);
       $field->save();
@@ -88,10 +86,9 @@ function crear_publicaciones_install() {
       ]);
     }
     $form_display->setComponent('body', [
-      'type' => 'text_textarea_with_summary',
+      'type' => 'text_textarea',
       'settings' => [
-        'rows' => 9,
-        'summary_rows' => 3,
+        'rows' => 5,
       ],
       'weight' => 0,
       'region' => 'content',
