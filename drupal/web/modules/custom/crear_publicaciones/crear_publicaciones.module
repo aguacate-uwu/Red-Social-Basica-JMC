@@ -5,6 +5,8 @@ use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\block\Entity\Block;
+use Drupal\node\Entity\NodeType;
+
 /**
  * Implementa hook_install().
  *
@@ -30,7 +32,10 @@ function crear_publicaciones_install() {
     ]);
 
     // Eliminar parte innecesaria
-    $content_type->set('display_submitted', FALSE); 
+    $content_type->setThirdPartySetting('node', 'display_submitted', FALSE);
+    $content_type->setThirdPartySetting('menu_ui', 'available_menus', []);
+    $content_type->setThirdPartySetting('menu_ui', 'parent', '');
+    $content_type->setNewRevision(FALSE);
     
     $content_type->save();
     }
