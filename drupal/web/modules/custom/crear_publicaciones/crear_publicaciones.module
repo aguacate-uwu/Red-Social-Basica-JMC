@@ -29,6 +29,19 @@ function crear_publicaciones_install() {
       'description' => t('Contenido creado por los usuarios en la página principal.', [], ['context' => 'content type description']),
       'display_submitted' => TRUE,
     ]);
+
+    // Eliminar configuración de menu
+    $content_type->set('settings', array_merge($content_type->get('settings'), [
+      'menu_ui' => FALSE,
+      'display_submitted' => FALSE,
+    ]));
+    
+    $content_type->setThirdPartySetting('node', 'options', [
+      'status' => FALSE, // Oculta el checkbox "Published"
+      'promote' => FALSE, // Oculta "Promote to front page"
+      'sticky' => FALSE, // Oculta "Sticky at top"
+    ]);
+
     $content_type->save();
     }
 
@@ -103,6 +116,8 @@ function crear_publicaciones_install() {
     $form_display->removeComponent('options');
     
     $form_display->save();
+
+    dpm(array_keys($form_display->getComponents()));
 
     // Configurar la visualización de la vista para el campo 'Cuerpo'.
     $view_display = EntityViewDisplay::load('node.' . $content_type_id . '.default');
