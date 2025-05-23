@@ -216,6 +216,27 @@ function crear_publicaciones_install() {
       ])->save();
     }
 
+    // Configuración adicional de los comentarios para que no estén en la página principal
+    $teaser_display = EntityViewDisplay::load('node.' . $content_type_id . '.teaser');
+    if (!$teaser_display) {
+      $teaser_display = EntityViewDisplay::create([
+        'targetEntityType' => 'node',
+        'bundle' => $content_type_id,
+        'mode' => 'teaser',
+        'status' => TRUE,
+      ]);
+    }
+    $teaser_display->setComponent('comment', [
+      'type' => 'comment_default',
+      'label' => 'above',
+      'settings' => [
+        'pager_id' => 0,
+        'view_mode' => 'hidden', // Oculta los comentarios
+        'display_mode' => 'count', // Solo mostrar el número de comentarios
+        'display_submitted' => FALSE,
+      ],
+    ])->save();
+
 }
 
 /**
