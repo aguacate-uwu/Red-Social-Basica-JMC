@@ -30,10 +30,10 @@ class CommentCountFormatter extends FormatterBase {
 
     if ($entity->hasField('comment') && !$entity->get('comment')->isEmpty()) {
       $comment_field = $entity->get('comment');
-      $count = $comment_field->comment_count;
+      $count = $comment_field->comment_count ?? 0;
     }
 
-    $elements[] = [
+    $elements[0] = [
       '#markup' => $this->t('@count comentario(s)', ['@count' => $count]),
     ];
 
