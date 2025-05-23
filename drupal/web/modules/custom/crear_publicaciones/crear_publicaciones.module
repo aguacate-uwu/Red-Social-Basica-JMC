@@ -226,15 +226,10 @@ function crear_publicaciones_install() {
         'status' => TRUE,
       ]);
     }
-    $teaser_display->setComponent('comment', [
-      'type' => 'comment_default',
-      'label' => 'above',
-      'settings' => [
-        'pager_id' => 0,
-        'view_mode' => 'hidden', // Oculta los comentarios
-        'display_mode' => 'count', // Solo mostrar el número de comentarios
-        'display_submitted' => FALSE,
-      ],
+    $teaser_display->removeComponent('comment');
+    $teaser_display->setComponent('comment__comment_count', [
+      'type' => 'comment_entity_count',
+      'label' => 'inline',
     ])->save();
 
 }
