@@ -110,7 +110,7 @@ function crear_publicaciones_install() {
     
     $form_display->save();
 
-    dpm(array_keys($form_display->getComponents()));
+    \Drupal::logger('crear_publicaciones')->notice('<pre>' . print_r(array_keys($form_display->getComponents()), TRUE) . '</pre>');
 
     // Configurar la visualización de la vista para el campo 'Cuerpo'.
     $view_display = EntityViewDisplay::load('node.' . $content_type_id . '.default');
