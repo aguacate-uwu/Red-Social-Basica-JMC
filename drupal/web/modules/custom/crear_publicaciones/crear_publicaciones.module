@@ -92,7 +92,12 @@ function crear_publicaciones_install() {
       ],
       'weight' => 0,
       'region' => 'content',
-    ])->save();
+    ]);
+    
+    // Ocultar el campo "status" del formulario
+    $form_display->removeComponent('status');
+    
+    $form_display->save();
 
     // Configurar la visualización de la vista para el campo 'Cuerpo'.
     $view_display = EntityViewDisplay::load('node.' . $content_type_id . '.default');
