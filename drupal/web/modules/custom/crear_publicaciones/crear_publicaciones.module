@@ -6,6 +6,7 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\block\Entity\Block;
 use Drupal\node\Entity\NodeType;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implementa hook_install().
@@ -38,6 +39,7 @@ function crear_publicaciones_install() {
     $content_type->setNewRevision(FALSE);
     
     $content_type->save();
+    
     }
 
     // Asignar permisos para usuarios autenticados.
@@ -156,4 +158,19 @@ function crear_publicaciones_install() {
     $block->setWeight(-8);
     $block->save();
     }
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ *
+ * esta función es para ocultar las partes molestas que no quieren irse del bloque
+ */
+function crear_publicaciones_form_node_publicacion_usuario_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (isset($form['revision_information'])) {
+    $form['revision_information']['#access'] = FALSE;
+  }
+  if (isset($form['revision_log_message'])) {
+    $form['revision_log_message']['#access'] = FALSE;
+  }
+}
+
 }
