@@ -182,7 +182,7 @@ function crear_publicaciones_install() {
         'label' => 'Comentarios',
         'field_type' => 'comment',
         'settings' => [
-          'default_mode' => 1, // 1 = abierto (open)
+          'default_mode' => 1,
           'comment_type' => $comment_type_id,
           'perms' => [],
         ],
@@ -235,7 +235,8 @@ function crear_publicaciones_install() {
     ]);
 
     $teaser_display->removeComponent('comment');
-    $teaser_display->setComponent('comment__comment_count', [
+
+    $teaser_display->setComponent('comment', [
       'type' => 'comment_entity_count',
       'label' => 'inline',
     ]);
