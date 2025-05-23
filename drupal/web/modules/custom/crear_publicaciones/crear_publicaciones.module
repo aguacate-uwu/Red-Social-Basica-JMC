@@ -158,6 +158,7 @@ function crear_publicaciones_install() {
     $block->setWeight(-8);
     $block->save();
     }
+}
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -171,6 +172,4 @@ function crear_publicaciones_form_node_publicacion_usuario_form_alter(array &$fo
   if (isset($form['revision_log_message'])) {
     $form['revision_log_message']['#access'] = FALSE;
   }
-}
-
 }
