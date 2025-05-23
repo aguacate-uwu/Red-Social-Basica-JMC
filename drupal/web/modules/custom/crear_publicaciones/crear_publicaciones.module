@@ -226,11 +226,21 @@ function crear_publicaciones_install() {
         'status' => TRUE,
       ]);
     }
+
+    // nos aseguramos de que el campo body se sigue viendo
+    $teaser_display->setComponent('body', [
+      'label' => 'hidden',
+      'type' => 'text_summary_or_trimmed',
+      'settings' => [],
+    ]);
+
     $teaser_display->removeComponent('comment');
     $teaser_display->setComponent('comment__comment_count', [
       'type' => 'comment_entity_count',
       'label' => 'inline',
-    ])->save();
+    ]);
+
+    $teaser_display->save();
 
 }
 
