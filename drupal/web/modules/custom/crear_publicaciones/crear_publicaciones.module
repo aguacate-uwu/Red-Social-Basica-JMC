@@ -264,7 +264,7 @@ use Drupal\Core\Entity\EntityInterface;
  *
  * Añade el conteo de comentarios a las publicaciones de usuario en el teaser.
  */
-function crear_publicaciones_node_view_alter(array &$build, EntityInterface $node, \Drupal\Core\Display\DisplayInterface $display) {
+function crear_publicaciones_node_view_alter(array &$build, EntityInterface $node, DisplayInterface $display) {
   // Solo actuar en el tipo de contenido 'publicacion_usuario' y en el modo 'teaser'.
   if ($node->getType() == 'publicacion_usuario' && $display->getMode() == 'teaser') {
     // Asegúrate de que el nodo tenga el campo de comentarios.
