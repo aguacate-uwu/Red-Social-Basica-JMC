@@ -234,11 +234,12 @@ function crear_publicaciones_install() {
       'settings' => [],
     ]);
 
-    $teaser_display->removeComponent('comment');
-    
+    $teaser_display->removeComponent('comment'); // Asegura limpieza previa
     $teaser_display->setComponent('comment', [
-      'type' => 'comment_entity_count',
+      'type' => 'comment_entity_count', // Usa formatter personalizado
       'label' => 'inline',
+      'weight' => 10,
+      'settings' => [],
     ]);
 
     $teaser_display->save();
