@@ -1,3 +1,5 @@
+
+
 <?php
 
 namespace Drupal\crear_publicaciones\Plugin\Field\FieldFormatter;
@@ -7,7 +9,7 @@ use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\comment\CommentManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface; // Necesario para obtener el storage
 
 /**
  * Plugin de formato para contar comentarios.
@@ -23,11 +25,11 @@ use Drupal\comment\CommentManagerInterface;
 class CommentCountFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The comment manager.
+   * The entity type manager.
    *
-   * @var \Drupal\comment\CommentManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $commentManager;
+  protected $entityTypeManager;
 
   /**
    * Constructs a new CommentCountFormatter instance.
@@ -46,12 +48,21 @@ class CommentCountFormatter extends FormatterBase implements ContainerFactoryPlu
    * The view mode.
    * @param array $third_party_settings
    * Third party settings.
-   * @param \Drupal\comment\CommentManagerInterface $comment_manager
-   * The comment manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * The entity type manager.
    */
-  public function __construct($plugin_id, $plugin_definition, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, CommentManagerInterface $comment_manager) {
+  public function __construct(
+    $plugin_id,
+    $plugin_definition,
+    \Drupal\Core\Field\FieldDefinitionInterface $field_definition,
+    array $settings,
+    $label,
+    $view_mode,
+    array $third_party_settings,
+    EntityTypeManagerInterface $entity_type_manager // Inyectamos el servicio
+  ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
-    $this->commentManager = $comment_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -66,7 +77,7 @@ class CommentCountFormatter extends FormatterBase implements ContainerFactoryPlu
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('comment.manager')
+      $container->get('entity_type.manager') // Obtenemos el servicio desde el contenedor
     );
   }
 
@@ -78,12 +89,19 @@ class CommentCountFormatter extends FormatterBase implements ContainerFactoryPlu
     $entity = $items->getEntity();
     $count = 0;
 
+    // Solo si la entidad tiene un campo de comentarios y es visible.
     if ($entity->hasField('comment') && $entity->get('comment')->access('view', \Drupal::currentUser())) {
-      // estadísticas de comentarios
-      $comment_statistics = $this->commentManager->getCommentStatistics($entity->id(), $entity->getEntityTypeId());
-      if ($comment_statistics && isset($comment_statistics->comment_count)) {
-        $count = $comment_statistics->comment_count;
-      }
+      // Cargar los comentarios por las propiedades de la entidad a la que están adjuntos.
+      $comments = $this->entityTypeManager
+        ->getStorage('comment')
+        ->loadByProperties([
+          'entity_id' => $entity->id(),
+          'entity_type' => $entity->getEntityTypeId(),
+          'field_name' => $this->fieldDefinition->getName(), // Usar el nombre del campo actual
+          'status' => 1, // Solo contar comentarios publicados
+        ]);
+
+      $count = count($comments);
     }
 
     $elements[0] = [
@@ -92,5 +110,4 @@ class CommentCountFormatter extends FormatterBase implements ContainerFactoryPlu
 
     return $elements;
   }
-
 }
