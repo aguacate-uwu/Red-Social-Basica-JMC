@@ -160,7 +160,7 @@ function crear_publicaciones_install() {
     $block->save();
     }
 
-     // Crear tipo de comentario si no existe
+      // Crear tipo de comentario si no existe
     $comment_type_id = 'comentario_publicacion';
     if (!\Drupal\comment\Entity\CommentType::load($comment_type_id)) {
       \Drupal\comment\Entity\CommentType::create([
@@ -234,14 +234,7 @@ function crear_publicaciones_install() {
       'settings' => [],
     ]);
 
-    $teaser_display->removeComponent('comment'); // Asegura limpieza previa
-    $teaser_display->setComponent('comment', [
-      'type' => 'comment_entity_count', // Usa formatter personalizado
-      'label' => 'inline',
-      'weight' => 10,
-      'settings' => [],
-    ]);
-
+    $teaser_display->removeComponent('comment');
     $teaser_display->save();
 
 }
@@ -257,5 +250,51 @@ function crear_publicaciones_form_node_publicacion_usuario_form_alter(array &$fo
   }
   if (isset($form['revision_log_message'])) {
     $form['revision_log_message']['#access'] = FALSE;
+  }
+}
+
+// **NUEVO HOOK PARA AÑADIR EL CONTADOR DE COMENTARIOS AL TEASER**
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\FormatterBase;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_node_view_alter().
+ *
+ * Añade el conteo de comentarios a las publicaciones de usuario en el teaser.
+ */
+function crear_publicaciones_node_view_alter(array &$build, EntityInterface $node, \Drupal\Core\Display\DisplayInterface $display) {
+  // Solo actuar en el tipo de contenido 'publicacion_usuario' y en el modo 'teaser'.
+  if ($node->getType() == 'publicacion_usuario' && $display->getMode() == 'teaser') {
+    // Asegúrate de que el nodo tenga el campo de comentarios.
+    if ($node->hasField('comment')) {
+      $comment_field_name = 'comment'; // El nombre del campo de comentarios.
+      $field_definition = $node->get($comment_field_name)->getFieldDefinition();
+
+      // Crear una instancia de tu formatter de conteo de comentarios.
+      $formatter_manager = \Drupal::service('plugin.manager.field.formatter');
+      $formatter_options = [
+        'field_definition' => $field_definition,
+        'view_mode' => $display->getMode(),
+        'configuration' => [
+          'type' => 'comment_entity_count',
+          'label' => 'inline',
+          'settings' => [],
+        ],
+        'third_party_settings' => [],
+      ];
+      $formatter = $formatter_manager->getInstance($formatter_options);
+
+      // Renderizar los elementos del formatter.
+      $items = $node->get($comment_field_name);
+      $elements = $formatter->viewElements($items, $node->getUntranslated()->language()->getId());
+
+      // Adjuntar los elementos renderizados al array de construcción del nodo.
+      // Se añade al final del contenido del nodo.
+      if (!empty($elements)) {
+        $build['comment_count_display'] = reset($elements); // Toma el primer elemento.
+        $build['comment_count_display']['#weight'] = 100; // Puedes ajustar el peso para ordenar.
+      }
+    }
   }
 }
