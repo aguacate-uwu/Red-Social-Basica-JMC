@@ -22,13 +22,10 @@ class CommentCountFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $elements = [];
     $entity = $items->getEntity();
-    $count = 0;
+    $elements = [];
 
-    // Verificar que el campo exista y sea visible
-    if ($entity->hasField('comment') && $entity->get('comment')->access('view')) {
-      // Cargar comentarios publicados relacionados
+    if (!$entity->isNew() && $entity->hasField('comment')) {
       $comments = \Drupal::entityTypeManager()
         ->getStorage('comment')
         ->loadByProperties([
@@ -37,12 +34,19 @@ class CommentCountFormatter extends FormatterBase {
           'field_name' => $this->fieldDefinition->getName(),
           'status' => 1,
         ]);
-
       $count = count($comments);
     }
+    else {
+      $count = 0;
+    }
 
+    // Devolver solo markup simple, sin claves que otros módulos esperen
     $elements[] = [
       '#markup' => $this->formatPlural($count, '1 comentario', '@count comentarios'),
+      '#cache' => [
+        'contexts' => ['user.roles', 'url'],
+        'tags' => ['comment_list'],
+      ],
     ];
 
     return $elements;
