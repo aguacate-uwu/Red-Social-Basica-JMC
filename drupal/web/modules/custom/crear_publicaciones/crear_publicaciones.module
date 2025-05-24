@@ -233,6 +233,7 @@ function crear_publicaciones_install() {
       'label' => 'hidden',
       'type' => 'text_summary_or_trimmed',
       'settings' => [],
+      'weight' => 0,
     ]);
 
     $teaser_display->removeComponent('comment');
