@@ -3,7 +3,7 @@
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Display\DisplayInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\block\Entity\Block;
@@ -264,7 +264,7 @@ use Drupal\Core\Entity\EntityInterface;
  *
  * Añade el conteo de comentarios a las publicaciones de usuario en el teaser.
  */
-function crear_publicaciones_node_view_alter(array &$build, EntityInterface $node, DisplayInterface $display) {
+function crear_publicaciones_node_view_alter(array &$build, \Drupal\node\NodeInterface $node, EntityViewDisplayInterface $display) {
   // Solo actuar en el tipo de contenido 'publicacion_usuario' y en el modo 'teaser'.
   if ($node->getType() == 'publicacion_usuario' && $display->getMode() == 'teaser') {
     // Asegúrate de que el nodo tenga el campo de comentarios.
