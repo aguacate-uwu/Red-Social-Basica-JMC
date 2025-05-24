@@ -41,16 +41,13 @@ class CommentCountFormatter extends FormatterBase {
       $count = count($comments);
     }
 
-    // Devolver en un contenedor, para que no sobrescriba claves de los render arrays esperados
     $elements[] = [
-      '#type' => 'container',
-      '#attributes' => ['class' => ['comment-count']],
-      'content' => [
-        '#markup' => $this->formatPlural($count, '1 comentario', '@count comentarios'),
-      ],
+      '#markup' => $this->formatPlural($count, '1 comentario', '@count comentarios'),
+      '#prefix' => '<div class="comment-count">',
+      '#suffix' => '</div>',
       '#cache' => [
         'contexts' => ['user.roles', 'url'],
-        'tags' => ['comment_list'],
+        'tags' => ['comment_list', 'node:' . $entity->id()],
       ],
     ];
 
