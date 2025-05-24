@@ -25,6 +25,10 @@ class CommentCountFormatter extends FormatterBase {
     $entity = $items->getEntity();
     $elements = [];
 
+    // Inicializamos en cero por defecto.
+    $count = 0;
+
+    // Solo si la entidad está guardada y tiene el campo correspondiente.
     if (!$entity->isNew() && $entity->hasField('comment')) {
       $comments = \Drupal::entityTypeManager()
         ->getStorage('comment')
@@ -36,13 +40,14 @@ class CommentCountFormatter extends FormatterBase {
         ]);
       $count = count($comments);
     }
-    else {
-      $count = 0;
-    }
 
-    // Devolver solo markup simple, sin claves que otros módulos esperen
+    // Devolver en un contenedor, para que no sobrescriba claves de los render arrays esperados
     $elements[] = [
-      '#markup' => $this->formatPlural($count, '1 comentario', '@count comentarios'),
+      '#type' => 'container',
+      '#attributes' => ['class' => ['comment-count']],
+      'content' => [
+        '#markup' => $this->formatPlural($count, '1 comentario', '@count comentarios'),
+      ],
       '#cache' => [
         'contexts' => ['user.roles', 'url'],
         'tags' => ['comment_list'],
